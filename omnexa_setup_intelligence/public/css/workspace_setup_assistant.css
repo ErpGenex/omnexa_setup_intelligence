@@ -1,0 +1,64 @@
+/* Omnexa Setup Intelligence — workspace widget styling (scoped by id) */
+
+#omnexa-setup-assistant {
+	margin-bottom: 16px;
+}
+
+#omnexa-setup-assistant .omnexa-setup-card {
+	background: var(--card-bg, #fff);
+	border: 1px solid var(--border-color, #e3e8f1);
+	border-radius: var(--border-radius, 10px);
+	padding: 12px 12px;
+}
+
+#omnexa-setup-assistant .omnexa-setup-head {
+	display: flex;
+	flex-direction: column;
+	gap: 2px;
+	margin-bottom: 10px;
+}
+
+#omnexa-setup-assistant .omnexa-setup-title {
+	font-weight: 600;
+	font-size: 14px;
+}
+
+#omnexa-setup-assistant .omnexa-setup-sub {
+	font-size: 12px;
+}
+
+#omnexa-setup-assistant .omnexa-setup-body {
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+}
+
+#omnexa-setup-assistant .omnexa-setup-item {
+	display: flex;
+	align-items: flex-start;
+	justify-content: space-between;
+	gap: 12px;
+	padding: 10px 10px;
+	border-radius: calc(var(--border-radius, 10px) - 2px);
+	border: 1px solid color-mix(in srgb, var(--border-color, #e3e8f1) 85%, transparent);
+	background: color-mix(in srgb, var(--card-bg, #fff) 92%, var(--bg-color, #f2f5fa));
+}
+
+#omnexa-setup-assistant .omnexa-setup-item-title {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	font-weight: 600;
+}
+
+#omnexa-setup-assistant .omnexa-setup-item-msg {
+	margin-top: 2px;
+	font-size: 12px;
+	line-height: 1.4;
+}
+
+#omnexa-setup-assistant .omnexa-setup-item-actions {
+	flex: 0 0 auto;
+	padding-top: 2px;
+}
+

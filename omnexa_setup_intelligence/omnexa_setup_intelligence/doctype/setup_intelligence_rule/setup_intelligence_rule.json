@@ -1,0 +1,212 @@
+{
+	"actions": [],
+	"allow_rename": 0,
+	"autoname": "hash",
+	"creation": "2026-04-19 00:00:00.000000",
+	"doctype": "DocType",
+	"engine": "InnoDB",
+	"field_order": [
+		"tab_break_overview",
+		"workspace",
+		"module",
+		"column_break_omnexa_2",
+		"enabled",
+		"governance_code",
+		"tab_break_1",
+		"section_rule",
+		"title",
+		"message",
+		"column_break_omnexa_1",
+		"severity",
+		"blocking",
+		"company_scoped",
+		"tab_break_2",
+		"section_condition",
+		"condition_dsl",
+		"tab_break_3",
+		"section_action",
+		"action_type",
+		"action_value",
+		"order",
+		"tab_break_4",
+		"owner_section",
+		"rule_owner",
+		"owner_user"
+	],
+	"fields": [
+		{
+			"fieldname": "tab_break_overview",
+			"fieldtype": "Tab Break",
+			"label": "Overview"
+		},
+		{
+			"fieldname": "tab_break_1",
+			"fieldtype": "Tab Break",
+			"label": "Details"
+		},
+		{
+			"fieldname": "tab_break_2",
+			"fieldtype": "Tab Break",
+			"label": "Further"
+		},
+		{
+			"fieldname": "tab_break_3",
+			"fieldtype": "Tab Break",
+			"label": "Posting"
+		},
+		{
+			"fieldname": "tab_break_4",
+			"fieldtype": "Tab Break",
+			"label": "More"
+		},
+		{
+			"fieldname": "workspace",
+			"fieldtype": "Data",
+			"label": "Workspace",
+			"reqd": 1
+		},
+		{
+			"fieldname": "module",
+			"fieldtype": "Data",
+			"label": "Module/Domain",
+			"description": "Optional grouping hint (Sales / Inventory / Accounts / Projects / HR)."
+		},
+		{
+			"default": "1",
+			"fieldname": "enabled",
+			"fieldtype": "Check",
+			"label": "Enabled"
+		},
+		{
+			"fieldname": "governance_code",
+			"fieldtype": "Data",
+			"label": "Governance Code"
+		},
+		{
+			"fieldname": "section_rule",
+			"fieldtype": "Section Break",
+			"label": "Rule"
+		},
+		{
+			"fieldname": "title",
+			"fieldtype": "Data",
+			"label": "Title",
+			"reqd": 1
+		},
+		{
+			"fieldname": "message",
+			"fieldtype": "Small Text",
+			"label": "Message"
+		},
+		{
+			"fieldname": "severity",
+			"fieldtype": "Select",
+			"label": "Severity",
+			"options": "low\nmedium\nhigh\ncritical",
+			"default": "medium"
+		},
+		{
+			"default": "0",
+			"fieldname": "blocking",
+			"fieldtype": "Check",
+			"label": "Blocking",
+			"description": "If enabled, treat as a setup blocker (shown at the top)."
+		},
+		{
+			"default": "1",
+			"fieldname": "company_scoped",
+			"fieldtype": "Check",
+			"label": "Company scoped",
+			"description": "If enabled, evaluate using user's default company context."
+		},
+		{
+			"fieldname": "section_condition",
+			"fieldtype": "Section Break",
+			"label": "Condition (DSL)"
+		},
+		{
+			"fieldname": "condition_dsl",
+			"fieldtype": "Small Text",
+			"label": "Condition DSL",
+			"reqd": 1,
+			"description": "Example: count.Customer == 0"
+		},
+		{
+			"fieldname": "section_action",
+			"fieldtype": "Section Break",
+			"label": "Action"
+		},
+		{
+			"fieldname": "action_type",
+			"fieldtype": "Select",
+			"label": "Action type",
+			"options": "route\ndoctype_list\ndoctype_new\nreport\nsettings",
+			"default": "route",
+			"reqd": 1
+		},
+		{
+			"fieldname": "action_value",
+			"fieldtype": "Data",
+			"label": "Action value",
+			"description": "Examples: /app/customer, Customer, General Ledger"
+		},
+		{
+			"fieldname": "order",
+			"fieldtype": "Int",
+			"label": "Order",
+			"default": "100"
+		},
+		{
+			"fieldname": "owner_section",
+			"fieldtype": "Section Break",
+			"label": "Ownership"
+		},
+		{
+			"fieldname": "rule_owner",
+			"fieldtype": "Link",
+			"label": "Rule Owner",
+			"options": "User"
+		},
+		{
+			"fieldname": "owner_user",
+			"fieldtype": "Link",
+			"label": "Owner",
+			"options": "User"
+		},
+		{
+			"fieldname": "column_break_omnexa_1",
+			"fieldtype": "Column Break"
+		},
+		{
+			"fieldname": "column_break_omnexa_2",
+			"fieldtype": "Column Break"
+		}
+	],
+	"index_web_pages_for_search": 0,
+	"is_submittable": 0,
+	"links": [],
+	"modified": "2026-05-07 12:00:00",
+	"modified_by": "Administrator",
+	"module": "Omnexa Setup Intelligence",
+	"name": "Setup Intelligence Rule",
+	"naming_rule": "Random",
+	"owner": "Administrator",
+	"permissions": [
+		{
+			"create": 1,
+			"delete": 1,
+			"email": 1,
+			"export": 1,
+			"print": 1,
+			"read": 1,
+			"report": 1,
+			"role": "System Manager",
+			"share": 1,
+			"write": 1
+		}
+	],
+	"sort_field": "modified",
+	"sort_order": "DESC",
+	"states": [],
+	"track_changes": 1
+}
