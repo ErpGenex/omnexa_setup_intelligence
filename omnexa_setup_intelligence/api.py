@@ -13,15 +13,20 @@ def _action_payload(rule) -> dict:
 	t = rule.action_type or "route"
 	v = rule.action_value or ""
 	if t == "doctype_list":
-		return {"label": "Fix now", "type": "route", "value": f"/app/{frappe.scrub(v)}"}
+		return {"label": "Fix now", "type": "route", "value": f"/app/{frappe.scrub(v)}"
+	}
 	if t == "doctype_new":
-		return {"label": "Create", "type": "route", "value": f"/app/{frappe.scrub(v)}/new"}
+		return {"label": "Create", "type": "route", "value": f"/app/{frappe.scrub(v)}/new"
+	}
 	if t == "report":
-		return {"label": "Open report", "type": "route", "value": f"/app/query-report/{frappe.scrub(v)}"}
+		return {"label": "Open report", "type": "route", "value": f"/app/query-report/{frappe.scrub(v)}"
+	}
 	if t == "settings":
-		return {"label": "Open settings", "type": "route", "value": f"/app/{frappe.scrub(v)}"}
+		return {"label": "Open settings", "type": "route", "value": f"/app/{frappe.scrub(v)}"
+	}
 	# route
-	return {"label": "Fix now", "type": "route", "value": v or "/app"}
+	return {"label": "Fix now", "type": "route", "value": v or "/app"
+	}
 
 
 @frappe.whitelist(methods=["POST"])
@@ -36,7 +41,8 @@ def get_workspace_checklist(workspace: str | None = None):
 
 	rules = frappe.get_all(
 		"Setup Intelligence Rule",
-		filters={"enabled": 1, "workspace": ws},
+		filters={"enabled": 1, "workspace": ws
+	},
 		fields=[
 			"name",
 			"workspace",
@@ -69,21 +75,23 @@ def get_workspace_checklist(workspace: str | None = None):
 			continue
 		items.append(
 			{
-				"id": f"rule:{r.get('name')}",
+				"id": f"rule:{r.get('name')
+	}",
 				"title": r.get("title"),
 				"message": r.get("message") or "",
 				"severity": (r.get("severity") or "medium"),
 				"blocking": int(r.get("blocking") or 0),
-				"action": _action_payload(frappe._dict(r)),
-			}
+				"action": _action_payload(frappe._dict(r))
+	}
 		)
 
 	return {
 		"ok": True,
 		"workspace": ws,
 		"company": company,
-		"facts": {"count": facts.get("count"), "settings": facts.get("settings")},
-		"items": items,
+		"facts": {"count": facts.get("count"), "settings": facts.get("settings")
+	},
+		"items": items
 	}
 
 
@@ -113,8 +121,8 @@ def get_executive_governance_summary():
 			{
 				"workspace": ws,
 				"missing_items": len(items),
-				"top_items": [i.get("title") for i in items[:3]],
-			}
+				"top_items": [i.get("title") for i in items[:3]]
+	}
 		)
 
 	base_score = 100
@@ -133,7 +141,7 @@ def get_executive_governance_summary():
 		"total_missing_items": total_missing,
 		"critical_items": critical,
 		"high_items": high,
-		"workspace_breakdown": details,
+		"workspace_breakdown": details
 	}
 @frappe.whitelist()
 def preview_infra_kpi(scenario: str | None = None, params: str | None = None) -> dict:

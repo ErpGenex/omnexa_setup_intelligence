@@ -60,7 +60,7 @@ def build_facts(company: str | None = None) -> dict:
 	out = {
 		"company": company,
 		"count": count,
-		"settings": settings,
+		"settings": settings
 	}
 	return out
 

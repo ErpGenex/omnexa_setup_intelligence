@@ -216,22 +216,22 @@ after_migrate = "omnexa_setup_intelligence.install.after_migrate"
 
 # user_data_fields = [
 # 	{
-# 		"doctype": "{doctype_1}",
-# 		"filter_by": "{filter_by}",
-# 		"redact_fields": ["{field_1}", "{field_2}"],
+# 		"doctype": "{}",
+# 		"filter_by": "{}",
+# 		"redact_fields": ["{}", "{}"],
 # 		"partial": 1,
 # 	},
 # 	{
-# 		"doctype": "{doctype_2}",
-# 		"filter_by": "{filter_by}",
+# 		"doctype": "{}",
+# 		"filter_by": "{}",
 # 		"partial": 1,
 # 	},
 # 	{
-# 		"doctype": "{doctype_3}",
+# 		"doctype": "{}",
 # 		"strict": False,
 # 	},
 # 	{
-# 		"doctype": "{doctype_4}"
+# 		"doctype": "{}"
 # 	}
 # ]
 

@@ -55,8 +55,8 @@ def seed_default_rules():
 			"condition_dsl": "count.Customer == 0",
 			"action_type": "route",
 			"action_value": "/app/customer",
-			"order": 10,
-		},
+			"order": 10
+	},
 		{
 			"workspace": "Sales",
 			"module": "Sales",
@@ -69,8 +69,8 @@ def seed_default_rules():
 			"condition_dsl": "count.Sales Invoice == 0",
 			"action_type": "route",
 			"action_value": "/app/sales-invoice",
-			"order": 20,
-		},
+			"order": 20
+	},
 		{
 			"workspace": "Inventory",
 			"module": "Inventory",
@@ -83,8 +83,8 @@ def seed_default_rules():
 			"condition_dsl": "count.Warehouse == 0",
 			"action_type": "route",
 			"action_value": "/app/warehouse",
-			"order": 10,
-		},
+			"order": 10
+	},
 		{
 			"workspace": "Inventory",
 			"module": "Inventory",
@@ -97,8 +97,8 @@ def seed_default_rules():
 			"condition_dsl": "count.Item == 0",
 			"action_type": "route",
 			"action_value": "/app/item",
-			"order": 20,
-		},
+			"order": 20
+	},
 		{
 			"workspace": "Accounts",
 			"module": "Accounts",
@@ -111,8 +111,8 @@ def seed_default_rules():
 			"condition_dsl": "count.Supplier == 0",
 			"action_type": "route",
 			"action_value": "/app/supplier",
-			"order": 20,
-		},
+			"order": 20
+	},
 		{
 			"workspace": "Accounts",
 			"module": "Accounts",
@@ -125,8 +125,8 @@ def seed_default_rules():
 			"condition_dsl": "settings.Global Defaults.default_company is empty",
 			"action_type": "settings",
 			"action_value": "System Settings",
-			"order": 30,
-		},
+			"order": 30
+	},
 		{
 			"workspace": "Accounts",
 			"module": "Accounts",
@@ -139,14 +139,15 @@ def seed_default_rules():
 			"condition_dsl": "count.Purchase Invoice == 0",
 			"action_type": "route",
 			"action_value": "/app/purchase-invoice",
-			"order": 40,
-		},
+			"order": 40
+	},
 	]
 
 	for r in rules:
 		existing = frappe.db.get_value(
 			"Setup Intelligence Rule",
-			{"workspace": r["workspace"], "title": r["title"]},
+			{"workspace": r["workspace"], "title": r["title"]
+	},
 			"name",
 		)
 		if existing:
