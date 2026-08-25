@@ -146,8 +146,7 @@ def seed_default_rules():
 	for r in rules:
 		existing = frappe.db.get_value(
 			"Setup Intelligence Rule",
-			{"workspace": r["workspace"], "title": r["title"]
-	},
+			{"workspace": r["workspace"], "title": r["title"]},
 			"name",
 		)
 		if existing:
@@ -161,6 +160,138 @@ def seed_default_rules():
 			if not doc:
 				continue
 			doc.insert(ignore_permissions=True)
+
+	seed_activity_rule_packs()
+
+
+ACTIVITY_RULE_PACKS: dict[str, list[dict]] = {
+	"Healthcare": [
+		{
+			"workspace": "Healthcare",
+			"module": "Healthcare",
+			"governance_code": "SI-GOV-HC-PATIENT-MASTER",
+			"title": "Healthcare patient master is empty",
+			"message": "Register at least one Healthcare Patient before clinical workflows.",
+			"severity": "high",
+			"blocking": 1,
+			"company_scoped": 1,
+			"condition_dsl": "count.Healthcare Patient == 0",
+			"action_type": "route",
+			"action_value": "/app/healthcare-patient",
+			"order": 10,
+		},
+	],
+	"Hotel Assets": [
+		{
+			"workspace": "Assets",
+			"module": "Fixed Assets",
+			"governance_code": "SI-GOV-HOTEL-ASSET-REGISTER",
+			"title": "Fixed asset register is empty",
+			"message": "Create hotel room and equipment assets to enable maintenance and RFID tracking.",
+			"severity": "high",
+			"blocking": 1,
+			"company_scoped": 1,
+			"condition_dsl": "count.Asset == 0",
+			"action_type": "route",
+			"action_value": "/app/asset",
+			"order": 10,
+		},
+	],
+	"Construction": [
+		{
+			"workspace": "Projects",
+			"module": "Construction",
+			"governance_code": "SI-GOV-CON-PROJECT-MASTER",
+			"title": "No construction projects defined",
+			"message": "Create a Project to track contracts, BOQ, and site progress.",
+			"severity": "high",
+			"blocking": 1,
+			"company_scoped": 1,
+			"condition_dsl": "count.Project == 0",
+			"action_type": "route",
+			"action_value": "/app/project",
+			"order": 10,
+		},
+	],
+	"Financial Services": [
+		{
+			"workspace": "Accounts",
+			"module": "Finance",
+			"governance_code": "SI-GOV-FIN-CUSTOMER-MASTER",
+			"title": "Finance customer portfolio is empty",
+			"message": "Onboard at least one Customer before loan or treasury operations.",
+			"severity": "high",
+			"blocking": 1,
+			"company_scoped": 1,
+			"condition_dsl": "count.Customer == 0",
+			"action_type": "route",
+			"action_value": "/app/customer",
+			"order": 5,
+		},
+	],
+	"Education": [
+		{
+			"workspace": "Education",
+			"module": "Education",
+			"governance_code": "SI-GOV-EDU-CUSTOMER-MASTER",
+			"title": "Student/parent billing master is empty",
+			"message": "Create Customers (students or guardians) before fee billing.",
+			"severity": "medium",
+			"blocking": 0,
+			"company_scoped": 1,
+			"condition_dsl": "count.Customer == 0",
+			"action_type": "route",
+			"action_value": "/app/customer",
+			"order": 10,
+		},
+	],
+}
+
+
+def _condition_doctype(condition_dsl: str) -> str | None:
+	if not condition_dsl or not condition_dsl.startswith("count."):
+		return None
+	return condition_dsl[len("count.") :].split("==")[0].strip()
+
+
+def seed_activity_rule_packs():
+	"""Seed vertical setup rules per company business activity (idempotent)."""
+	if not _ensure_rule_doctype_ready():
+		return
+
+	installed = set(frappe.get_installed_apps() or [])
+	for company in frappe.get_all("Company", pluck="name"):
+		try:
+			from omnexa_core.omnexa_core.activity_labels import resolve_company_activity_raw
+
+			activity = resolve_company_activity_raw(company)
+		except Exception:
+			continue
+		pack = ACTIVITY_RULE_PACKS.get(activity) or []
+		for rule in pack:
+			doctype = _condition_doctype(rule.get("condition_dsl") or "")
+			if doctype and not frappe.db.exists("DocType", doctype):
+				continue
+			if rule.get("module") == "Healthcare" and "omnexa_healthcare" not in installed:
+				continue
+			if rule.get("module") == "Fixed Assets" and "omnexa_fixed_assets" not in installed:
+				continue
+			existing = frappe.db.get_value(
+				"Setup Intelligence Rule",
+				{"governance_code": rule.get("governance_code")},
+				"name",
+			)
+			if existing:
+				doc = _safe_get_doc("Setup Intelligence Rule", existing)
+				if not doc:
+					continue
+				doc.update(rule)
+				doc.save(ignore_permissions=True)
+			else:
+				doc = _safe_get_doc({"doctype": "Setup Intelligence Rule", **rule})
+				if not doc:
+					continue
+				doc.insert(ignore_permissions=True)
 
 
 def _ensure_rule_doctype_ready() -> bool:

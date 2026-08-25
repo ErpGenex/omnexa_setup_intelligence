@@ -155,23 +155,11 @@ after_migrate = "omnexa_setup_intelligence.install.after_migrate"
 # Scheduled Tasks
 # ---------------
 
-# scheduler_events = {
-# 	"all": [
-# 		"omnexa_setup_intelligence.tasks.all"
-# 	],
-# 	"daily": [
-# 		"omnexa_setup_intelligence.tasks.daily"
-# 	],
-# 	"hourly": [
-# 		"omnexa_setup_intelligence.tasks.hourly"
-# 	],
-# 	"weekly": [
-# 		"omnexa_setup_intelligence.tasks.weekly"
-# 	],
-# 	"monthly": [
-# 		"omnexa_setup_intelligence.tasks.monthly"
-# 	],
-# }
+scheduler_events = {
+	"daily": [
+		"omnexa_setup_intelligence.tasks.daily",
+	],
+}
 
 # Testing
 # -------

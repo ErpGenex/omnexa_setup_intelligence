@@ -9,6 +9,28 @@ from omnexa_setup_intelligence.engine.dsl import DSLError, eval_condition
 from omnexa_setup_intelligence.engine.facts import build_facts, get_user_company
 
 
+def _governance_workspaces() -> list[str]:
+	"""Public workspace titles for executive governance rollup."""
+	try:
+		rows = frappe.get_all(
+			"Workspace",
+			filters={"public": 1, "is_hidden": 0},
+			pluck="title",
+			order_by="sequence_id asc, title asc",
+			limit_page_length=50,
+		)
+		seen: list[str] = []
+		for title in rows or []:
+			normalized = (title or "").strip()
+			if normalized and normalized not in seen:
+				seen.append(normalized)
+		if seen:
+			return seen
+	except Exception:
+		pass
+	return ["Sales", "Inventory", "Accounts", "Projects", "HR"]
+
+
 def _action_payload(rule) -> dict:
 	t = rule.action_type or "route"
 	v = rule.action_value or ""
@@ -37,7 +59,6 @@ def get_workspace_checklist(workspace: str | None = None):
 
 	ws = (workspace or "").strip() or "Global"
 	company = get_user_company()
-	facts = build_facts(company)
 
 	rules = frappe.get_all(
 		"Setup Intelligence Rule",
@@ -62,6 +83,8 @@ def get_workspace_checklist(workspace: str | None = None):
 
 	items = []
 	for r in rules:
+		company_scoped = int(r.get("company_scoped") or 0)
+		facts = build_facts(company, company_scoped=bool(company_scoped))
 		try:
 			missing = bool(eval_condition(r.get("condition_dsl"), facts))
 		except DSLError:
@@ -85,23 +108,23 @@ def get_workspace_checklist(workspace: str | None = None):
 	}
 		)
 
+	summary_facts = build_facts(company, company_scoped=True)
 	return {
 		"ok": True,
 		"workspace": ws,
 		"company": company,
-		"facts": {"count": facts.get("count"), "settings": facts.get("settings")
-	},
-		"items": items
+		"facts": {"count": summary_facts.get("count"), "settings": summary_facts.get("settings")},
+		"items": items,
 	}
 
 
-@frappe.whitelist(methods=["POST"])
+@frappe.whitelist(methods=["GET", "POST"])
 def get_executive_governance_summary():
 	"""High-level governance score for executive dashboard."""
 	if frappe.session.user == "Guest":
 		frappe.throw("Login required.", frappe.PermissionError)
 
-	workspaces = ["Sales", "Inventory", "Accounts", "Projects", "HR"]
+	workspaces = _governance_workspaces()
 	details = []
 	total_missing = 0
 	critical = 0
