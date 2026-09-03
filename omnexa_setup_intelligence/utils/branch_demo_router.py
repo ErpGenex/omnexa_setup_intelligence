@@ -106,6 +106,23 @@ def run_demo_action_for_branch(branch_doc, action_key: str, **kwargs) -> dict:
 			sync_laravel=kwargs.get("sync_laravel", cint(branch_doc.get("branch_demo_education_sync_laravel") or 0)),
 		)
 
+	if key == "legal_firm":
+		if "erpgenex_legal" not in (frappe.get_installed_apps() or []):
+			frappe.throw(
+				_("Install and migrate erpgenex_legal on this site, then reload the Branch form."),
+				title=_("Legal demo"),
+			)
+		from erpgenex_legal.utils.branch_demo_seed import seed_legal_firm_demo
+
+		return seed_legal_firm_demo(
+			company=company,
+			branch=branch,
+			clients=kwargs.get("clients", cint(branch_doc.get("branch_demo_legal_clients")) or 30),
+			matters=kwargs.get("matters", cint(branch_doc.get("branch_demo_legal_matters")) or 15),
+			lawyers=kwargs.get("lawyers", 8),
+			force=kwargs.get("force", 0),
+		)
+
 	if key == "reset_dry":
 		from omnexa_accounting.utils.production_readiness import reset_transactions
 
